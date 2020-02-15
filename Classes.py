@@ -138,9 +138,19 @@ class TitleScreen(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image1 = pygame.image.load(os.path.join('Assets',
-                                        'Background','bg1.png')).convert()
+                                        'Background','bg1.jpg')).convert()
         self.image0 = pygame.image.load(os.path.join('Assets',
-                                        'Background','bg0.png')).convert()
-                                        
+                                        'Background','bg0.jpg')).convert()
+        self.image = self.image1
+        self.rect = self.image.get_rect()
+        self.timer = 30
+        self.toggle = False
     def update(self):
-        
+        if self.timer <= 0:
+            self.toggle = not self.toggle
+            if self.toggle:
+                self.image = self.image1
+            else:
+                self.image = self.image0
+            self.timer = 24
+        self.timer -= 1
