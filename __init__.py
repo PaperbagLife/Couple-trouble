@@ -13,15 +13,27 @@ windowWidth = 600
 windowHeight = 800
 window = pygame.display.set_mode((windowWidth,windowHeight))
 clock = pygame.time.Clock()
-gameSpeed = 30
+gameSpeed = 50
 video = cv2.VideoCapture(0)
+#length of amount of obstacle
+obsLen = 1
 
 def coupleTrouble():
     gameOver = False
     playerSpriteGroup = pygame.sprite.Group() 
     player = Player(windowWidth//2,windowHeight - 80)
     playerSpriteGroup.add(player)
+    obstacleSpriteGroup = pygame.sprite.Group()
+    obstacleInterval = 100
+    obstacleTimer = obstacleInterval
     while not gameOver:
+        obstacleTimer -= 1
+        print(obstacleTimer)
+        print("x", player.rect.centerx, "y", player.rect.centery)
+        if obstacleTimer <= 0:
+            curObs = Obstacle(random.randint(0,windowWidth), random.randint(0,obsLen-1))
+            obstacleSpriteGroup.add(curObs)
+            obstacleTimer = obstacleInterval
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -130,8 +142,14 @@ def coupleTrouble():
 
 
 
-
+        for obstacle in obstacleSpriteGroup:
+            if obstacle.move() >= windowHeight:
+                obstacleSpriteGroup.remove(obstacle)
+            if obstacle.collide(player):
+                gameOver = True
         
+        print(len(obstacleSpriteGroup))
+        obstacleSpriteGroup.draw(window)
         playerSpriteGroup.draw(window)
         pygame.display.update()
         clock.tick(gameSpeed)

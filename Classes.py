@@ -6,6 +6,8 @@ import os
 import random
 import math
 
+obstacles = ["obs1.png"]
+
 class Player(pygame.sprite.Sprite):
     #player ship, has a powerLevel for the bullets, which is leveled up through
     #gaining exp
@@ -21,10 +23,22 @@ class Player(pygame.sprite.Sprite):
         
 class Obstacle(pygame.sprite.Sprite):
     #The obstacle class dropping from the sky.
-    def __init__(self, x, idx, vel = 10):
+    def __init__(self, x, idx, velocity = 10):
         pygame.sprite.Sprite.__init__(self)
-        
-        
+        self.idx = idx
+        self.image = pygame.image.load(os.path.join('Assets',
+                        'Obstacles',obstacles[self.idx])).convert()
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = 0
+        self.velocity = velocity
+    def move(self):
+        #return new top, in main should get rid of self based on self.top
+        self.rect.centery += self.velocity
+        return self.rect.top
+    def collide(self,player):
+        return self.rect.colliderect(player.rect)
+    
 
 class Background(pygame.sprite.Sprite):
     def __init__(self,filePath):
