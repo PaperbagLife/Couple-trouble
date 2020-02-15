@@ -6,7 +6,8 @@ import os
 import random
 import math
 
-obstacles = ["obs1.png"]
+obstacles = ["airplane.png","bomb1.png","car1.jpeg", "greenhat1.jpeg","rock1.jpeg", "tree1.jpeg"]
+obstacleScale = [(80,100),(100,100),(90,180),(100,100),(100,100),(100,100)]
 
 class Player(pygame.sprite.Sprite):
     #player ship, has a powerLevel for the bullets, which is leveled up through
@@ -21,15 +22,20 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.rect.centery = y
         self.velocity = 16
-        
+
+
+def getScale(idx):
+    return obstacleScale[idx]
+    
 class Obstacle(pygame.sprite.Sprite):
     #The obstacle class dropping from the sky.
-    def __init__(self, x, idx, velocity = 10):
+    def __init__(self, x, idx, velocity = 20):
         pygame.sprite.Sprite.__init__(self)
         self.idx = idx
-        self.image = pygame.image.load(os.path.join('Assets',
-                        'Obstacles',obstacles[self.idx])).convert()
+        self.image = pygame.transform.scale(pygame.image.load(os.path.join('Assets',
+                        'Obstacles',obstacles[self.idx])).convert(), getScale(idx))
         self.rect = self.image.get_rect()
+        self.image.set_colorkey((255,255,0))
         self.rect.centerx = x
         self.rect.bottom = 0
         self.velocity = velocity
@@ -50,7 +56,7 @@ class Background(pygame.sprite.Sprite):
         self.rect.left = 0
         self.rect.bottom = 800
     def move(self):
-        self.rect.centery += 1
+        self.rect.centery += 10
         if self.rect.top >= 0:
             self.rect.bottom = 800
         

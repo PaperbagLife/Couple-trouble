@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
-obsLen = 1
+obsLen = 6
 distanceX = 100
 distanceY = 300
 leftRegion = 338
@@ -147,13 +147,9 @@ def titleScreen():
             if holding:
                 holdTimer -= 1
             if holdTimer <= 0:
+                cv2.destroyAllWindows()
                 coupleTrouble()
             
-                
-
-
-        
-        
         bgGroup.draw(window)
         for bg in bgGroup:
             bg.update()
@@ -171,7 +167,8 @@ def coupleTrouble():
     obstacleSpriteGroup = pygame.sprite.Group()
     obstacleInterval = 100
     obstacleTimer = obstacleInterval
-    
+    bgGroup = pygame.sprite.Group()
+    bgGroup.add(Background("background.png"))
     center1 = None
     center2 = None
     endTimer = 100
@@ -263,8 +260,8 @@ def coupleTrouble():
         cv2.line(frame, (rightRegion,0), (rightRegion,windowHeight), 
                                                         (0,255,0),2)
         cv2.imshow("original",frame)
-        cv2.imshow("mask",mask1)
-        cv2.imshow("mask2",mask2)
+        # cv2.imshow("mask",mask1)
+        # cv2.imshow("mask2",mask2)
 
         
         key = cv2.waitKey(1)
@@ -312,7 +309,10 @@ def coupleTrouble():
                 obstacleSpriteGroup.remove(obstacle)
             if obstacle.collide(player):
                 gameOver = True
-                
+        for bg in bgGroup:
+            bg.move()
+        
+        bgGroup.draw(window)
         obstacleSpriteGroup.draw(window)
         playerSpriteGroup.draw(window)
         pygame.display.update()
@@ -346,7 +346,6 @@ def endScreen(x,y):
         pygame.display.update()
         clock.tick(gameSpeed)
     return
-    
     
 
 titleScreen()
