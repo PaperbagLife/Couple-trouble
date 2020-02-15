@@ -129,8 +129,8 @@ def coupleTrouble():
         cv2.line(frame, (rightRegion,0), (rightRegion,windowHeight), 
                                                         (0,255,0),2)
         cv2.imshow("original",frame)
-        cv2.imshow("mask",mask1)
-        cv2.imshow("mask2",mask2)
+        # cv2.imshow("mask",mask1)
+        # cv2.imshow("mask2",mask2)
 
         
         key = cv2.waitKey(1)
