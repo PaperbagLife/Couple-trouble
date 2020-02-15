@@ -17,12 +17,18 @@ gameSpeed = 30
 video = cv2.VideoCapture(0)
 
 def coupleTrouble():
-    gameOver = True
+    gameOver = False
     playerSpriteGroup = pygame.sprite.Group() 
     player = Player(windowWidth//2,windowHeight - 80)
     playerSpriteGroup.add(player)
     while not gameOver:
-        print("in loop")
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                video.release()
+                cv2.destroyAllWindows()
+                return
+        
         check, frame = video.read()
         frame = imutils.resize(frame, width=600)
         #Mirrors the frame
@@ -108,6 +114,7 @@ def coupleTrouble():
         #Use these to do controls
 
         #Opencv end
+        window.fill((0,0,0))
         #keyboard control
         keys = pygame.key.get_pressed()
         
@@ -119,7 +126,6 @@ def coupleTrouble():
             player.rect.centery -= player.velocity
         if keys[pygame.K_DOWN] and player.rect.bottom < windowHeight:
             player.rect.centery += player.velocity
-
 
 
 
