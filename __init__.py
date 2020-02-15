@@ -17,7 +17,7 @@ gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
 obsLen = 7
-distanceX = 100
+distanceX = 200
 distanceY = 300
 leftRegion = 338
 rightRegion = 563
@@ -39,7 +39,7 @@ def titleScreen():
     center2 = None
     holding = False
     holdTimer = 100
-    
+    graceTime = 20
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,11 +56,11 @@ def titleScreen():
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         
         #Setting up corresponding colors for the game
-        color1low = np.array([14,100,100])
+        color1low = np.array([14,120,120])
         color1high = np.array([39,255,255])
         
-        color2low = np.array([48,100,100])
-        color2high = np.array([72,255,255])
+        color2low = np.array([46,60,85])
+        color2high = np.array([86,200,200])
         
         csv = cv2.cvtColor(blurred,cv2.COLOR_RGB2HSV)
         mask1 = cv2.inRange(csv,color1low,color1high)
@@ -122,8 +122,8 @@ def titleScreen():
         cv2.line(frame, (rightRegion,0), (rightRegion,windowHeight), 
                                                         (0,255,0),2)
         cv2.imshow("original",frame)
-        cv2.imshow("mask",mask1)
-        cv2.imshow("mask2",mask2)
+        # cv2.imshow("mask",mask1)
+        # cv2.imshow("mask2",mask2)
 
         
         key = cv2.waitKey(1)
@@ -153,7 +153,7 @@ def titleScreen():
         bgGroup.draw(window)
         for bg in bgGroup:
             bg.update()
-            
+        
         startTimer = hpFont.render("Start: "+ str(holdTimer),False, (0,0,0))
         window.blit(startTimer,(210,400))
         pygame.display.update()
@@ -174,6 +174,7 @@ def coupleTrouble():
     endTimer = 100
     dodged = 0
     originalInterval = 100
+    graceTime = 15
     
     while not gameOver:
         obstacleTimer -= 1
@@ -199,11 +200,11 @@ def coupleTrouble():
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         
         #Setting up corresponding colors for the game
-        color1low = np.array([14,100,100])
+        color1low = np.array([14,120,120])
         color1high = np.array([39,255,255])
         
-        color2low = np.array([48,100,100])
-        color2high = np.array([72,255,255])
+        color2low = np.array([46,60,85])
+        color2high = np.array([86,200,200])
         
         csv = cv2.cvtColor(blurred,cv2.COLOR_RGB2HSV)
         mask1 = cv2.inRange(csv,color1low,color1high)
@@ -290,6 +291,8 @@ def coupleTrouble():
             player.rect.centery += player.velocity
         if keys[pygame.K_1]:
             obstacleSpriteGroup.add(Obstacle(random.randint(0,windowWidth),6))
+        if keys[pygame.K_g]:
+            dodged += 10
 
         ## OpenCV Control
         ## This is controller for game
@@ -299,6 +302,13 @@ def coupleTrouble():
             (x2,y2) = center2
             if isCloseEnough(x1,y1,x2,y2):
                 xAverage = (x1+x2)/2
+                graceTime = 15
+            else:
+                graceTime -= 1
+                print(graceTime)
+                if graceTime <= 0:
+                    gameOver = True
+                    print("exit distance")
             if xAverage > rightRegion and player.rect.right < windowWidth:
                 player.rect.x += player.velocity
             if xAverage < leftRegion and player.rect.left > 0:
@@ -314,20 +324,22 @@ def coupleTrouble():
         for obstacle in obstacleSpriteGroup:
             if obstacle.move() >= windowHeight:
                 obstacleSpriteGroup.remove(obstacle)
+                dodged += 1
             if obstacle.collide(player):
                 gameOver = True
         for bg in bgGroup:
             bg.move()
         
         bgGroup.draw(window)
+        obCount = hpFont.render("Score: %d" %(dodged), False, (0,0,0))
+        window.blit(obCount,(225,100))
         obstacleSpriteGroup.draw(window)
         playerSpriteGroup.draw(window)
         pygame.display.update()
         clock.tick(gameSpeed)
-
+        
     #Gameover, done for
     
-    video.release()
     cv2.destroyAllWindows()
     endScreen(player.rect.centerx, player.rect.centery)
     return
@@ -337,8 +349,8 @@ def endScreen(x,y):
     
     heartBreakGroup.add(HeartBreak(x,y,(80,70)))
     notEnd = True
+    endTimer = 1000
     while notEnd:
-        print("inloop")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -347,12 +359,22 @@ def endScreen(x,y):
                 return
         window.fill((0,0,0))
         heartBreakGroup.draw(window)
-        print(len(heartBreakGroup))
         for heartBreak in heartBreakGroup:
             heartBreak.update()
+        endTimer -= 1
+        if endTimer <= 0:
+            notEnd = False
         pygame.display.update()
         clock.tick(gameSpeed)
+        
+        check, frame = video.read()
+        frame = imutils.resize(frame, width=900)
+        #Mirrors the frame
+        frame = cv2.flip(frame,1)
+        cv2.imshow("original",frame)
+    cv2.destroyAllWindows()
+    titleScreen()
     return
     
-coupleTrouble()
+
 titleScreen()
