@@ -11,13 +11,10 @@ class Player(pygame.sprite.Sprite):
     #gaining exp
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.normalImage = pygame.image.load(os.path.join('Assets',
-                                        'Player','playerNew.png')).convert()
 
-        self.image = self.normalImage
+        self.image = pygame.image.load(os.path.join('Assets',
+                                'Player','placeholder.png')).convert()
         self.rect = self.image.get_rect()
-        self.invincibleTimer = 0
-        self.invincible = False
         self.rect.centerx = x
         self.rect.centery = y
         self.velocity = 10

@@ -14,15 +14,15 @@ windowHeight = 800
 window = pygame.display.set_mode((windowWidth,windowHeight))
 clock = pygame.time.Clock()
 gameSpeed = 30
+video = cv2.VideoCapture(0)
 
 def coupleTrouble():
     gameOver = True
     playerSpriteGroup = pygame.sprite.Group() 
     player = Player(windowWidth//2,windowHeight - 80)
     playerSpriteGroup.add(player)
-
-    video = cv2.VideoCapture(0)
     while not gameOver:
+        print("in loop")
         check, frame = video.read()
         frame = imutils.resize(frame, width=600)
         #Mirrors the frame
@@ -119,9 +119,16 @@ def coupleTrouble():
             player.rect.centery -= player.velocity
         if keys[pygame.K_DOWN] and player.rect.bottom < windowHeight:
             player.rect.centery += player.velocity
+
+
+
+
+
+
         
-
-
+        playerSpriteGroup.draw(window)
+        pygame.display.update()
+        clock.tick(gameSpeed)
 
     #Gameover, done for
 
@@ -131,3 +138,5 @@ def coupleTrouble():
 
 
     return
+
+coupleTrouble()
