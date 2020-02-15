@@ -18,7 +18,7 @@ video = cv2.VideoCapture(0)
 #length of amount of obstacle
 obsLen = 1
 distanceX = 100
-distanceY = 3000
+distanceY = 300
 leftRegion = 225
 rightRegion = 375
 
