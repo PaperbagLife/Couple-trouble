@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
-        self.velocity = 10
+        self.velocity = 16
         
 class Obstacle(pygame.sprite.Sprite):
     #The obstacle class dropping from the sky.

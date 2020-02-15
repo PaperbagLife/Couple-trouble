@@ -17,6 +17,14 @@ gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
 obsLen = 1
+distanceX = 100
+distanceY = 3000
+leftRegion = 225
+rightRegion = 375
+
+def isCloseEnough(x1,y1,x2,y2):
+    return (abs(x1 - x2) <= distanceX) and (abs(y1-y2) <= distanceY)
+
 
 def coupleTrouble():
     gameOver = False
@@ -26,10 +34,12 @@ def coupleTrouble():
     obstacleSpriteGroup = pygame.sprite.Group()
     obstacleInterval = 100
     obstacleTimer = obstacleInterval
+    
+    center1 = None
+    center2 = None
+    
     while not gameOver:
         obstacleTimer -= 1
-        print(obstacleTimer)
-        print("x", player.rect.centerx, "y", player.rect.centery)
         if obstacleTimer <= 0:
             curObs = Obstacle(random.randint(0,windowWidth), random.randint(0,obsLen-1))
             obstacleSpriteGroup.add(curObs)
@@ -74,8 +84,7 @@ def coupleTrouble():
         cnts2 = imutils.grab_contours(cnts2)
         
         
-        center1 = None
-        center2 = None
+        
 
         # only proceed if at least one contour was found
         if len(cnts1) > 0:
@@ -139,16 +148,32 @@ def coupleTrouble():
         if keys[pygame.K_DOWN] and player.rect.bottom < windowHeight:
             player.rect.centery += player.velocity
 
+        ## OpenCV Control
+        ## This is controller for game
+        xAverage = windowWidth//2
+        if center1 != None and center2 != None:
+            (x1,y1) = center1
+            (x2,y2) = center2
+            if isCloseEnough(x1,y1,x2,y2):
+                xAverage = (x1+x2)/2
+            if xAverage > 375 and player.rect.right < windowWidth:
+                player.rect.x += player.velocity
+            if xAverage < 225 and player.rect.left > 0:
+                player.rect.x -= player.velocity
+        
+            
 
 
-
+        
+        
+        ## END of OpenCV Control
+        
         for obstacle in obstacleSpriteGroup:
             if obstacle.move() >= windowHeight:
                 obstacleSpriteGroup.remove(obstacle)
             if obstacle.collide(player):
                 gameOver = True
         
-        print(len(obstacleSpriteGroup))
         obstacleSpriteGroup.draw(window)
         playerSpriteGroup.draw(window)
         pygame.display.update()
