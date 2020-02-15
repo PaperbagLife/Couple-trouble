@@ -7,9 +7,9 @@ import random
 import math
 
 obstacles = ["airplane.png","bomb1.png","rock1.jpeg", "tree1.jpeg",
-            "ufo.jpeg","car.png"]
-obstacleScale = [(80,100),(100,100),(100,100),(100,100),(100,100),(50,100)]
-obstacleVel = [15,0,0,0,15,8]
+            "tank2.png","car.png","zombie3.png"]
+obstacleScale = [(80,100),(100,100),(100,100),(100,100),(100,100),(50,100),(60,120)]
+obstacleVel = [15,0,0,0,4,8,1]
 
 class Player(pygame.sprite.Sprite):
     #player ship, has a powerLevel for the bullets, which is leveled up through

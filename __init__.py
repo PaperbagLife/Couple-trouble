@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
-obsLen = 6
+obsLen = 7
 distanceX = 100
 distanceY = 300
 leftRegion = 338
@@ -172,21 +172,26 @@ def coupleTrouble():
     center1 = None
     center2 = None
     endTimer = 100
-    
+    dodged = 0
+    originalInterval = 100
     
     while not gameOver:
         obstacleTimer -= 1
+        obstacleInterval = originalInterval
+        if obstacleInterval >= 20:
+            obstacleInterval -= dodged
         if obstacleTimer <= 0:
             curObs = Obstacle(random.randint(0,windowWidth), random.randint(0,obsLen-1))
             obstacleSpriteGroup.add(curObs)
             obstacleTimer = obstacleInterval
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 video.release()
                 cv2.destroyAllWindows()
                 return
-        
+
         check, frame = video.read()
         frame = imutils.resize(frame, width=900)
         #Mirrors the frame
@@ -284,7 +289,7 @@ def coupleTrouble():
         if keys[pygame.K_DOWN] and player.rect.bottom < windowHeight:
             player.rect.centery += player.velocity
         if keys[pygame.K_1]:
-            obstacleSpriteGroup.add(Obstacle(random.randint(0,windowWidth),5))
+            obstacleSpriteGroup.add(Obstacle(random.randint(0,windowWidth),6))
 
         ## OpenCV Control
         ## This is controller for game
