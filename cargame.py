@@ -158,7 +158,7 @@ def game_intro():
 def game_loop():
     global pause
     ############
-    pygame.mixer.music.load('jazz.wav')
+    pygame.mixer.music.load('Aimer.mp3')
     pygame.mixer.music.play(-1)
     ############
     x = (display_width * 0.45)
@@ -169,8 +169,8 @@ def game_loop():
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
     thing_speed = 20
-    thing_width = random.randrange(80, 150)
-    thing_height = random.randrange(80, 150)
+    thing_width = random.randrange(100, 200)
+    thing_height = random.randrange(100, 200)
 
     thingCount = 1
 
