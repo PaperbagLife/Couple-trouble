@@ -168,9 +168,9 @@ def game_loop():
 
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
-    thing_speed = 4
-    thing_width = 100
-    thing_height = 100
+    thing_speed = 20
+    thing_width = random.randrange(80, 150)
+    thing_height = random.randrange(80, 150)
 
     thingCount = 1
 
@@ -187,9 +187,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -5
+                    x_change = -20
                 if event.key == pygame.K_RIGHT:
-                    x_change = 5
+                    x_change = 20
                 if event.key == pygame.K_p:
                     pause = True
                     paused()
