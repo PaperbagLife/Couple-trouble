@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
-obsLen = 6
+obsLen = 8
 distanceX = 100
 distanceY = 300
 leftRegion = 338
@@ -347,5 +347,5 @@ def endScreen(x,y):
         clock.tick(gameSpeed)
     return
     
-
+coupleTrouble()
 titleScreen()
