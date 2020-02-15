@@ -53,6 +53,7 @@ class Background(pygame.sprite.Sprite):
         if self.rect.top >= 0:
             self.rect.bottom = 800
         
+        
 class Button(pygame.sprite.Sprite):
     def __init__(self,x,y,filePath1,filePath2,action):
         pygame.sprite.Sprite.__init__(self)
