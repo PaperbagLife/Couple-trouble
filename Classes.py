@@ -79,3 +79,44 @@ class Button(pygame.sprite.Sprite):
                 self.action()
         else:
             self.image = self.normalImage
+            
+def getInterval(n):
+    #return new interval update based on phase
+    if n == 1 or n == 3:
+        return 20
+    return 100
+    
+    
+class HeartBreak(pygame.sprite.Sprite):
+    def __init__(self,x,y,scale):
+        pygame.sprite.Sprite.__init__(self)
+        exp0 = pygame.image.load(os.path.join('Assets','Player',
+                            'Death','0.png')).convert()
+        exp0.set_colorkey((102,204,255))
+        exp1 = pygame.image.load(os.path.join('Assets','Player',
+                            'Death','1.png')).convert()
+        exp1.set_colorkey((102,204,255))
+        exp2 = pygame.image.load(os.path.join('Assets','Player',
+                            'Death','2.png')).convert()
+        exp2.set_colorkey((102,204,255))
+        exp3 = pygame.image.load(os.path.join('Assets','Player',
+                            'Death','3.png')).convert()
+        exp3.set_colorkey((102,204,255))
+        self.images = [exp0,exp1,exp2,exp3]
+        self.image = self.exp0
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.count = 0
+        self.timeInt = 50
+        
+    def update(self):
+        
+        self.timeInt -= 1
+        if self.timeInt <= 0:
+            self.count += 1
+            self.timeInt = getInterval(self.count)
+        if self.count < len(self.images):
+            self.image = self.images[self.count]
+        #Return True if it needs to be destroyed, ie reached the end of explosion
+        return self.count == len(self.images)
