@@ -19,13 +19,18 @@ video = cv2.VideoCapture(0)
 obsLen = 1
 distanceX = 100
 distanceY = 300
-leftRegion = 225
-rightRegion = 375
+leftRegion = 338
+rightRegion = 563
 
 def isCloseEnough(x1,y1,x2,y2):
     return (abs(x1 - x2) <= distanceX) and (abs(y1-y2) <= distanceY)
 
-
+def titleScreen():
+    time.sleep(0.2)
+    pygame.mixer.music.load(os.path.join('Assets','Music','love.flac'))
+    pygame.mixer.music.play(-1)
+    bgGroup = pygame.sprite.Group()
+    bgGroup.add(TitleScreen):
 def coupleTrouble():
     gameOver = False
     playerSpriteGroup = pygame.sprite.Group() 
@@ -54,7 +59,7 @@ def coupleTrouble():
                 return
         
         check, frame = video.read()
-        frame = imutils.resize(frame, width=600)
+        frame = imutils.resize(frame, width=900)
         #Mirrors the frame
         frame = cv2.flip(frame,1)
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
@@ -190,9 +195,31 @@ def coupleTrouble():
     
     video.release()
     cv2.destroyAllWindows()
-
+    endScreen(player.rect.centerx, player.rect.centery)
     return
-
+    
+def endScreen(x,y):
+    heartBreakGroup = pygame.sprite.Group()
+    
+    heartBreakGroup.add(HeartBreak(x,y,(80,70)))
+    notEnd = True
+    while notEnd:
+        print("inloop")
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                video.release()
+                cv2.destroyAllWindows()
+                return
+        window.fill((0,0,0))
+        heartBreakGroup.draw(window)
+        print(len(heartBreakGroup))
+        for heartBreak in heartBreakGroup:
+            heartBreak.update()
+            
+        pygame.display.update()
+        clock.tick(gameSpeed)
+    return
     
     
     

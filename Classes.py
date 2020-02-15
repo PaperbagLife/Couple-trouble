@@ -82,7 +82,7 @@ class Button(pygame.sprite.Sprite):
             
 def getInterval(n):
     #return new interval update based on phase
-    if n == 1 or n == 3:
+    if n < 4:
         return 20
     return 100
     
@@ -90,33 +90,41 @@ def getInterval(n):
 class HeartBreak(pygame.sprite.Sprite):
     def __init__(self,x,y,scale):
         pygame.sprite.Sprite.__init__(self)
-        exp0 = pygame.image.load(os.path.join('Assets','Player',
-                            'Death','0.png')).convert()
+        exp0 = pygame.transform.scale(pygame.image.load(os.path.join('Assets','Player',
+                            'Death','0.png')).convert(), scale)
         exp0.set_colorkey((102,204,255))
-        exp1 = pygame.image.load(os.path.join('Assets','Player',
-                            'Death','1.png')).convert()
+        exp1 = pygame.transform.scale(pygame.image.load(os.path.join('Assets','Player',
+                            'Death','1.png')).convert(), scale)
         exp1.set_colorkey((102,204,255))
-        exp2 = pygame.image.load(os.path.join('Assets','Player',
-                            'Death','2.png')).convert()
+        exp2 = pygame.transform.scale(pygame.image.load(os.path.join('Assets','Player',
+                            'Death','2.png')).convert(), scale)
         exp2.set_colorkey((102,204,255))
-        exp3 = pygame.image.load(os.path.join('Assets','Player',
-                            'Death','3.png')).convert()
+        exp3 = pygame.transform.scale(pygame.image.load(os.path.join('Assets','Player',
+                            'Death','3.png')).convert(), scale)
         exp3.set_colorkey((102,204,255))
         self.images = [exp0,exp1,exp2,exp3]
-        self.image = self.exp0
+        self.image = exp0
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
         self.count = 0
-        self.timeInt = 50
+        self.timeInt = 80
+        self.xVel = 0
+        self.yVel = 0
+        self.calculated = False
         
     def update(self):
-        if self.count == 0:
+        if not self.calculated:
             if self.rect.centerx != 300:
-                self.rect.centerx += (300-self.rect.centerx)/self.timeInt
+                self.xVel = (300-self.rect.centerx)/50
             if self.rect.centery != 400:
-                self.rect.centery += (400-self.rect.centerx)/self.timeInt
-            
+                self.yVel = (400-self.rect.centery)/50
+            self.calculated = True
+        if self.count == 0:
+            if self.rect.centerx < 298 or self.rect.centerx > 302:
+                self.rect.centerx += self.xVel
+            if self.rect.centery < 398 or self.rect.centery > 402:
+                self.rect.centery += self.yVel
         self.timeInt -= 1
         if self.timeInt <= 0:
             self.count += 1
@@ -125,3 +133,14 @@ class HeartBreak(pygame.sprite.Sprite):
             self.image = self.images[self.count]
         #Return True if it needs to be destroyed, ie reached the end of explosion
         return self.count == len(self.images)
+        
+class TitleScreen(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image1 = pygame.image.load(os.path.join('Assets',
+                                        'Background','bg1.png')).convert()
+        self.image0 = pygame.image.load(os.path.join('Assets',
+                                        'Background','bg0.png')).convert()
+                                        
+    def update(self):
+        
