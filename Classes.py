@@ -15,9 +15,9 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.image.load(os.path.join('Assets',
-                                'Obstacles','tree.png')).convert()
+                                'Player','player.png')).convert()
         self.rect = self.image.get_rect()
-        self.image.set_colorkey((255,239,16))
+        self.image.set_colorkey((102,204,255))
         self.rect.centerx = x
         self.rect.centery = y
         self.velocity = 16
