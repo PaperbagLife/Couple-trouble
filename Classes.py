@@ -6,9 +6,10 @@ import os
 import random
 import math
 
-obstacles = ["airplane.png","bomb1.png","car1.jpeg", "greenhat1.jpeg","rock1.jpeg", "tree1.jpeg",
-            "ufo.jpeg", "atom.jpeg"]
-obstacleScale = [(80,100),(100,100),(90,180),(100,100),(100,100),(100,100),(100,100),(40,100)]
+obstacles = ["airplane.png","bomb1.png","rock1.jpeg", "tree1.jpeg",
+            "ufo.jpeg","car.png"]
+obstacleScale = [(80,100),(100,100),(100,100),(100,100),(100,100),(50,100)]
+obstacleVel = [15,0,0,0,15,8]
 
 class Player(pygame.sprite.Sprite):
     #player ship, has a powerLevel for the bullets, which is leveled up through
@@ -30,7 +31,7 @@ def getScale(idx):
     
 class Obstacle(pygame.sprite.Sprite):
     #The obstacle class dropping from the sky.
-    def __init__(self, x, idx, velocity = 20):
+    def __init__(self, x, idx, velocity = 10):
         pygame.sprite.Sprite.__init__(self)
         self.idx = idx
         self.image = pygame.transform.scale(pygame.image.load(os.path.join('Assets',
@@ -39,7 +40,7 @@ class Obstacle(pygame.sprite.Sprite):
         self.image.set_colorkey((255,255,0))
         self.rect.centerx = x
         self.rect.bottom = 0
-        self.velocity = velocity
+        self.velocity = velocity + obstacleVel[idx]
     def move(self):
         #return new top, in main should get rid of self based on self.top
         self.rect.centery += self.velocity

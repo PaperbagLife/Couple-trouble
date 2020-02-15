@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 gameSpeed = 50
 video = cv2.VideoCapture(0)
 #length of amount of obstacle
-obsLen = 8
+obsLen = 6
 distanceX = 100
 distanceY = 300
 leftRegion = 338
@@ -283,6 +283,8 @@ def coupleTrouble():
             player.rect.centery -= player.velocity
         if keys[pygame.K_DOWN] and player.rect.bottom < windowHeight:
             player.rect.centery += player.velocity
+        if keys[pygame.K_1]:
+            obstacleSpriteGroup.add(Obstacle(random.randint(0,windowWidth),5))
 
         ## OpenCV Control
         ## This is controller for game
