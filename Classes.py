@@ -18,6 +18,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.rect.centery = y
         self.velocity = 10
+        
+class Obstacle(pygame.sprite.Sprite):
+    #The obstacle class dropping from the sky.
+    def __init__(self, x, idx, vel = 10):
+        pygame.sprite.Sprite.__init__(self)
+        
+        
 
 class Background(pygame.sprite.Sprite):
     def __init__(self,filePath):
