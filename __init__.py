@@ -180,14 +180,21 @@ def coupleTrouble():
                 obstacleSpriteGroup.remove(obstacle)
             if obstacle.collide(player):
                 gameOver = True
+                
+        obstacleSpriteGroup.draw(window)
+        playerSpriteGroup.draw(window)
+        pygame.display.update()
+        clock.tick(gameSpeed)
+
     #Gameover, done for
     
     video.release()
     cv2.destroyAllWindows()
-    endScreen()
-    
+
     return
+
     
-def endScreen()
+    
+    
 
 coupleTrouble()

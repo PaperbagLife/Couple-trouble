@@ -111,7 +111,12 @@ class HeartBreak(pygame.sprite.Sprite):
         self.timeInt = 50
         
     def update(self):
-        
+        if self.count == 0:
+            if self.rect.centerx != 300:
+                self.rect.centerx += (300-self.rect.centerx)/self.timeInt
+            if self.rect.centery != 400:
+                self.rect.centery += (400-self.rect.centerx)/self.timeInt
+            
         self.timeInt -= 1
         if self.timeInt <= 0:
             self.count += 1
